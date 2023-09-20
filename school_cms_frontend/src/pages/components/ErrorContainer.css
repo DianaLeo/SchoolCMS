@@ -1,0 +1,6 @@
+.errorContainer{
+    width: 100%;
+    text-align: left;
+    margin-top: 2vmin;
+    font-size: calc(5px + 1.5vmin);
+}

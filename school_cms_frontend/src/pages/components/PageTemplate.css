@@ -1,0 +1,129 @@
+.PageTemplate {
+    position: relative;
+    margin: 0 auto;
+    margin-top: 18vmin;
+    width: 80vmin;
+    max-width: 600px;
+}
+
+.dataList {
+    list-style: none;
+    background-color: #393d47;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.dataList li {
+    min-height: 50px;
+    height: 10vmin;
+    line-height: 10vmin;
+    cursor: pointer;
+    position: relative;
+}
+
+.dataList li::after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #282c34;
+}
+
+.dataList li:hover {
+    background-color: #585d68;
+}
+
+.addNewBtn {
+    position: absolute;
+    top: -12vmin;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 10vmin;
+    background-color: #282c34;
+    font-size: calc(10px + 2vmin);
+    border-radius: 2vmin;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+}
+
+.addNewFrom {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    max-height: 90vh;
+    width: 70vmin;
+    padding: 10vmin;
+    background-color: #393d47;
+    border-radius: 5vmin;
+    box-shadow: 0 0 500px rgba(0, 0, 0, 0.3), 0 0 50px rgba(0, 0, 0, 0.3);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.addNewFrom h2 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2vmin;
+}
+
+.addNewFrom.show {
+    display: flex;
+}
+
+.addNewFrom .closeBtn {
+    width: 5vmin;
+    height: 5vmin;
+    border-radius: 50%;
+    position: absolute;
+    top: 2vmin;
+    right: 2vmin;
+    font-size: 4vmin;
+}
+
+.addNewFrom label {
+    width: 100%;
+    text-align: left;
+    display: block;
+    margin-top: 2vmin;
+    margin-bottom: 1vmin;
+    font-size: calc(10px + 1vmin);
+}
+.addNewFrom form{
+    width: 100%;
+}
+
+.addNewFrom input[type="text"],
+.addNewFrom input[type="number"],
+.addNewFrom textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 1vmin;
+    border: 1px solid #282c34;
+    border-radius: 3px;
+    font-size: calc(10px + 2vmin);
+}
+
+.addNewFrom button[type="submit"] {
+    margin-top: 2vmin;
+    padding: 10px;
+    width: 100%;
+    background-color: pink;
+    color: #282c34;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: calc(10px + 2vmin);
+    line-height: calc(10px + 2vmin);
+}
+
+.addNewFrom .error{
+    outline: 5px solid rgb(246, 58, 58);
+}

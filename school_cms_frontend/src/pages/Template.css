@@ -1,0 +1,56 @@
+.bg {
+    text-align: center;
+    background-color: #282c34;
+    min-height: 100vh;
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; */
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+svg{
+    fill:#282c34;
+}
+
+.title{
+    font-size: calc(10px + 8vmin);
+    height: 32vmin;
+    line-height: 32vmin;
+}
+
+h3{
+    margin-top: 10vmin;
+}
+
+.width-80vm-600{
+    width: 80vw;
+    max-width: 600px;
+    margin:0 auto;
+}
+
+.navBar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navBar .link {
+    text-decoration: none;
+    transition: 0.4s ease;
+}
+
+.navBar .link:hover{
+    transform: scale(1.1);
+}
+
+button{
+    font-size: calc(10px + 2vmin);
+    color: white;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.App-link {
+    color: #61dafb;
+}
