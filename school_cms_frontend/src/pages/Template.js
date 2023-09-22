@@ -11,7 +11,7 @@ function Template() {
     return (
         <div className="bg">
             <h1 className="title">Olu Art Studio</h1>
-            <div className='navBar width-80vm-600'>
+            <div className='navBar width-80vm-700'>
                 <NavLink className='link' to='/Students'>
                     {({ isActive, isPending }) => (
                         <NavList
@@ -40,7 +40,7 @@ function Template() {
                     )}
                 </NavLink>
             </div>
-            <div className='width-80vm-600'>
+            <div className='width-80vm-700'>
                 <Outlet />
             </div>
         </div>

@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-function StudentForm({ formShow, getAllData, setErrors }) {
+function StudentAddForm({ formShow, getAllData, setErrors }) {
     const [firstname, setFirstname] = useState(false);
     const [lastname, setLastname] = useState(false);
     const [email, setEmail] = useState(false);
-    
+
     const form = useRef();
 
     useEffect(() => {
@@ -21,6 +21,10 @@ function StudentForm({ formShow, getAllData, setErrors }) {
         const formData = new FormData(form.current);
         const studentData = Object.fromEntries(formData.entries());
         console.log(studentData);
+        setFirstname(false);
+        setLastname(false);
+        setEmail(false);
+        setErrors([]);
         try {
             const response = await fetch(`${baseUrl}v1/students`, {
                 method: 'POST',
@@ -34,10 +38,10 @@ function StudentForm({ formShow, getAllData, setErrors }) {
             }
             const data = await response.json();
             if (data.errors) {
-                Object.keys(data.errors).map((k)=>{
-                    if (k==='firstname') setFirstname(true)
-                    if (k==='lastname') setLastname(true)
-                    if (k==='email') setEmail(true)
+                Object.keys(data.errors).map((k) => {
+                    if (k === 'firstname') setFirstname(true)
+                    if (k === 'lastname') setLastname(true)
+                    if (k === 'email') setEmail(true)
                 })
                 setErrors(data.errors);
             }
@@ -61,4 +65,4 @@ function StudentForm({ formShow, getAllData, setErrors }) {
     )
 }
 
-export { StudentForm }
+export { StudentAddForm }

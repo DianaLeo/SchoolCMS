@@ -1,7 +1,7 @@
 .bg {
     text-align: center;
-    background-color: #282c34;
-    min-height: 100vh;
+    /* background-color: #282c34; */
+    /* min-height: 100vh; */
     /* display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,9 +24,9 @@ h3{
     margin-top: 10vmin;
 }
 
-.width-80vm-600{
+.width-80vm-700{
     width: 80vw;
-    max-width: 600px;
+    max-width: 800px;
     margin:0 auto;
 }
 

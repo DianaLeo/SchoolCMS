@@ -2,7 +2,7 @@ import { useEffect, useRef,useState } from 'react';
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-function TeacherForm({ formShow, getAllData, setErrors }) {
+function TeacherAddForm({ formShow, getAllData, setErrors }) {
     const [firstname, setFirstname] = useState(false);
     const [lastname, setLastname] = useState(false);
     const [email, setEmail] = useState(false);
@@ -21,6 +21,10 @@ function TeacherForm({ formShow, getAllData, setErrors }) {
         const formData = new FormData(form.current);
         const studentData = Object.fromEntries(formData.entries());
         console.log(studentData);
+        setFirstname(false);
+        setLastname(false);
+        setEmail(false);
+        setErrors([]);
         try {
             const response = await fetch(`${baseUrl}v1/teachers`, {
                 method: 'POST',
@@ -30,6 +34,7 @@ function TeacherForm({ formShow, getAllData, setErrors }) {
             if (response.ok) {
                 form.current.reset();
                 getAllData();
+
             }
             const data = await response.json();
             if (data.errors) {
@@ -60,4 +65,4 @@ function TeacherForm({ formShow, getAllData, setErrors }) {
     )
 }
 
-export { TeacherForm }
+export { TeacherAddForm }

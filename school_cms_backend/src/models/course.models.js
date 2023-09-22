@@ -1,13 +1,12 @@
 const { Schema, model } = require('mongoose');
 
 module.exports = model('Course', new Schema({
-    _id: {
-        alias: 'code',
+    code: {
         type: String,
-        match: [/\w\w-\w\w-\d\d/, 'Invalid code format, expecting "xx-xx-00", x for a letter, 0 for a number'],
+        match: [/^[a-zA-Z][a-zA-Z]-[a-zA-Z][a-zA-Z]-\d\d$/, 'Invalid code format, expecting "xx-xx-00", x for a letter, 0 for a number'],
         required: [true, 'Course code is required'],
         uppercase: true,
-        //unique:true,
+        unique:[true, 'This code is already taken.'],
     },
     name: {
         type: String,

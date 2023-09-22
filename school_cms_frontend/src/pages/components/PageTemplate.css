@@ -2,8 +2,8 @@
     position: relative;
     margin: 0 auto;
     margin-top: 18vmin;
-    width: 80vmin;
-    max-width: 600px;
+    margin-bottom: 18vmin;
+    width: 100%;
 }
 
 .dataList {
@@ -16,15 +16,14 @@
     overflow: hidden;
 }
 
-.dataList li {
+.dataList .liContainer {
+    border: none;
     min-height: 50px;
-    height: 10vmin;
     line-height: 10vmin;
-    cursor: pointer;
     position: relative;
 }
 
-.dataList li::after {
+.dataList .liContainer::after {
     content: "";
     display: block;
     position: absolute;
@@ -34,8 +33,93 @@
     background-color: #282c34;
 }
 
-.dataList li:hover {
+.dataList .liP {
+    cursor: pointer;
+}
+
+.dataList .liP:hover {
     background-color: #585d68;
+}
+
+.dataList .liP.hidden {
+    display: none;
+}
+
+.dataList .updateForm {
+    width: 100%;
+    line-height: calc(15px + 7vmin);
+    padding: calc(10px + 3vmin);
+    display: none;
+    z-index: 2;
+    background-color: #585d68;
+}
+
+.dataList .updateForm.show {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dataList .updateForm .detialContainer {
+    width: 80%;
+}
+
+.dataList .updateForm .detialContainer .info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dataList .updateForm .buttonContainer {
+    width: 20%;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    line-height: calc(15px + 7vmin);
+}
+
+.dataList .updateForm button {
+    max-height: 60px;
+    height: 10vmin;
+    background-color: #282c34;
+    border-radius: 10px;
+    width: 80%;
+    margin-top: 15px;
+}
+
+.dataList .updateForm label {
+    font-size: calc(10px + 1.5vmin);
+    white-space: nowrap;
+    margin-right: 10px;
+}
+
+.dataList .updateForm input {
+    width: 80%;
+    height: calc(15px + 3vmin);
+    font-size: calc(10px + 1.5vmin);
+    border-radius: 5px;
+    padding: 0 10px;
+}
+
+.dataList .updateForm input:disabled {
+    border: none;
+    background-color: transparent;
+    color: white;
+}
+
+.dataList .updateForm .error {
+    outline: 5px solid rgb(246, 58, 58);
+}
+
+@media (max-width:600px) {
+    .dataList .updateForm.show {
+        flex-direction: column;
+    }
+
+    .dataList .updateForm .buttonContainer {
+        width: 100%;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
 }
 
 .addNewBtn {
@@ -52,11 +136,10 @@
 }
 
 .addNewFrom {
-    position: fixed;
-    top: 50%;
+    position: absolute;
+    top: -53vmin;
     left: 50%;
-    translate: -50% -50%;
-    max-height: 90vh;
+    translate: -50% 0;
     width: 70vmin;
     padding: 10vmin;
     background-color: #393d47;
@@ -96,7 +179,8 @@
     margin-bottom: 1vmin;
     font-size: calc(10px + 1vmin);
 }
-.addNewFrom form{
+
+.addNewFrom form {
     width: 100%;
 }
 
@@ -124,6 +208,6 @@
     line-height: calc(10px + 2vmin);
 }
 
-.addNewFrom .error{
+.addNewFrom .error {
     outline: 5px solid rgb(246, 58, 58);
 }

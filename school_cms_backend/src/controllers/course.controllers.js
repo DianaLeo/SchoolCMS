@@ -30,12 +30,12 @@ const getCourseById = async (req, res) => {
 };
 
 const addCourse = async (req, res) => {
-    const { _id, name, description } = req.body;
-    const course = new Course({ _id, name, description });
-    if (!_id || !name) {
-        res.status(400).json({ error: 'Bad request' });
-        return;
-    }
+    const { code, name, description } = req.body;
+    const course = new Course({ code, name, description });
+    // if (!code || !name) {
+    //     res.status(400).json({ error: 'Bad request' });
+    //     return;
+    // }
     try {
         await course.save();
         res.json(course);
@@ -48,29 +48,40 @@ const addCourse = async (req, res) => {
             }
             return res.status(400).json({ errors });
         }
-        res.status(500).json({ msg: error.message})
+        res.status(500).json({ msg: error.message })
     }
 };
 
 const updateCourseById = async (req, res) => {
+    console.log('updating course');
     const { id } = req.params;
-    const { name, description } = req.body;
+    const { code, name, description } = req.body;
     try {
         const course = await Course.findByIdAndUpdate(
             id,
-            { name, description },
-            { new: true }
+            { code, name, description },
+            {
+                new: true,
+                runValidators: true//only save() will call validation automatically
+            }
         ).exec();
         if (!course) {
-            res.status(404).json({ error: 'Course not found' });
-            return
+            res.status(404).json('Student not found');
+            return;
         }
         res.json(course);
     } catch (error) {
-        res.status(500).json({
-            error: 'Server error',
-            msg: error.message
-        })
+        if (error.name === 'ValidationError') {
+            console.log('ValidationError');
+            const errors = {};
+            for (const field in error.errors) {
+                console.log('error field:', error.errors);
+                errors[field] = error.errors[field].message;
+            }
+            return res.status(400).json({ errors });
+        }
+        res.status(500).json({ msg: error.message })
+
     }
 };
 

@@ -1,8 +1,10 @@
-function StudentsList({data}) {
+import { StudentListItem } from "./StudentListItem";
+
+function StudentsList({ data,getAllData }) {
     let arr = [];
-    data.forEach((i,index)=>{
+    data.forEach((i, index) => {
         arr.push(
-            <li key={index}>{i.firstname}</li>
+            <StudentListItem data={i} getAllData={getAllData} key={index} />
         )
     })
 

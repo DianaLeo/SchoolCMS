@@ -20,7 +20,7 @@ function Courses() {
     }
     return (
         <PageTemplate section="Course" getAllData={getAllData}>
-            <CoursesList  data={courses}/>
+            <CoursesList data={courses} getAllData={getAllData}/>
         </PageTemplate>
     )
 }

@@ -3,4 +3,6 @@
     text-align: left;
     margin-top: 2vmin;
     font-size: calc(5px + 1.5vmin);
+    color: rgb(253, 140, 140);
+    line-height: calc(8px + 1.5vmin);
 }

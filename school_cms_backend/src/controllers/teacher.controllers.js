@@ -50,6 +50,7 @@ const addTeachers = async (req, res) => {
 }
 
 const updateTeacherById = async (req, res) => {
+    console.log('updating teacher');
     const { id } = req.params;
     const { firstname, lastname, email } = req.body;
     try {
@@ -58,18 +59,27 @@ const updateTeacherById = async (req, res) => {
         const teacher = await Teacher.findByIdAndUpdate(
             id,
             { firstname, lastname, email },
-            { new: true }
+            {
+                new: true,
+                runValidators: true
+            }
         ).exec();
         if (!teacher) {
             res.status(404).json('Teacher not found');
             return;
         }
         res.json(teacher);
+
     } catch (error) {
-        res.status(500).json({
-            error: 'Sever error',
-            msg: error.message
-        });
+        if (error.name === 'ValidationError') {
+            const errors = {};
+            for (const field in error.errors) {
+                errors[field] = error.errors[field].message;
+            }
+            console.log(errors);
+            return res.status(400).json({ errors });
+        }
+        res.status(500).json(error);
     }
 }
 const deleteTeacherById = async (req, res) => {
@@ -84,7 +94,7 @@ const deleteTeacherById = async (req, res) => {
             const courseId = course.code;
             await Course.findByIdAndUpdate(courseId,
                 { $pull: { teachers: id } }
-                ).exec();
+            ).exec();
         })
         await Teacher.findByIdAndDelete(id).exec();
         res.sendStatus(204);

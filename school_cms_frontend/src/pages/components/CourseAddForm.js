@@ -1,22 +1,27 @@
-import { useEffect, useRef,useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-function CourseForm({ formShow, getAllData, setErrors }) {
-    const [id, setId] = useState(false);
-    const [name, setName] = useState(false);
+function CourseAddForm({ formShow, getAllData, setErrors }) {
+    const [errId, seterrId] = useState(false);
+    const [errName, setErrName] = useState(false);
 
     const form = useRef();
 
     useEffect(() => {
         form.current.reset();
+        seterrId(false);
+        setErrName(false);
     }, [formShow]);
 
     const formSubmitHandler = async (e) => {
         e.preventDefault();
         const formData = new FormData(form.current);
         const courseData = Object.fromEntries(formData.entries());
-        console.log('courseData:',courseData);
+        console.log('courseData:', courseData);
+        seterrId(false);
+        setErrName(false);
+        setErrors([]);
         try {
             const response = await fetch(`${baseUrl}v1/courses`, {
                 method: 'POST',
@@ -30,9 +35,9 @@ function CourseForm({ formShow, getAllData, setErrors }) {
             const data = await response.json();
             if (data.errors) {
                 console.log('data.errors');
-                Object.keys(data.errors).map((k)=>{
-                    if (k==='_id') setId(true)
-                    if (k==='name') setName(true)
+                Object.keys(data.errors).map((k) => {
+                    if (k === 'code') seterrId(true)
+                    if (k === 'name') setErrName(true)
                 })
                 setErrors(data.errors);
             }
@@ -40,13 +45,13 @@ function CourseForm({ formShow, getAllData, setErrors }) {
             console.log('postNewData error:', error);
         }
     }
-console.log(id,name);
+
     return (
         <form ref={form} onSubmit={formSubmitHandler}>
             <label htmlFor="code">Course Code:</label>
-            <input type="text" className={`${id ? "error" : ""}`} id="code" name="_id" required/>
+            <input type="text" className={`${errId ? "error" : ""}`} id="code" name="code"  />
             <label htmlFor="name">Course Name:</label>
-            <input type="text" className={`${name ? "error" : ""}`} id="name" name="name" required/>
+            <input type="text" className={`${errName ? "error" : ""}`} id="name" name="name"  />
             <label htmlFor="description">Description:</label>
             <input type="text" id="description" name="description" />
             <label htmlFor="students">Students:</label>
@@ -58,4 +63,4 @@ console.log(id,name);
     )
 }
 
-export { CourseForm }
+export { CourseAddForm }

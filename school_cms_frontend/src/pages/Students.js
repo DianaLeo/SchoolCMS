@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { PageTemplate } from "./components/PageTemplate";
 import { StudentsList } from "./components/StudentsList";
+import { StudentAddForm } from "./components/StudentAddForm";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
@@ -21,7 +22,7 @@ function Students() {
 
     return (
         <PageTemplate section="Student" getAllData={getAllData}>
-            <StudentsList data={students}/>
+            <StudentsList data={students} getAllData={getAllData}/>
         </PageTemplate>
     )
 }

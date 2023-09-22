@@ -57,6 +57,7 @@ const addStudents = async (req, res) => {
 }
 
 const updateStudentById = async (req, res) => {
+    console.log('updating student');
     const { id } = req.params;
     const { firstname, lastname, email } = req.body;
     try {
@@ -76,10 +77,16 @@ const updateStudentById = async (req, res) => {
         }
         res.json(student);
     } catch (error) {
-        res.status(500).json({
-            error: 'Sever error',
-            msg: error.message
-        });
+        //customize error message
+        if (error.name === 'ValidationError') {
+            const errors = {};
+            for (const field in error.errors) {
+                errors[field] = error.errors[field].message;
+            }
+            console.log(errors);
+            return res.status(400).json( {errors:errors} );
+        }
+        res.status(500).json({ error: error.message });
     }
 }
 const deleteStudentById = async (req, res) => {

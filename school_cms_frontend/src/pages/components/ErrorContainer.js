@@ -3,8 +3,8 @@ import './ErrorContainer.css';
 function ErrorContainer({ errors }) {
     const errorlist = [];
 
-    Object.values(errors).forEach(e => {
-        errorlist.push(<p>{e}</p>);
+    Object.values(errors).forEach((e,index) => {
+        errorlist.push(<p key={index}>{e}</p>);
     });
 
     return (

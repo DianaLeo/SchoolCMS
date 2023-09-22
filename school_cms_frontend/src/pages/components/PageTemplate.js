@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './PageTemplate.css';
-import { StudentForm } from './StudentForm';
-import { TeacherForm } from './TeacherForm';
-import { CourseForm } from './CourseForm';
+import { StudentAddForm } from './StudentAddForm';
+import { TeacherAddForm } from './TeacherAddForm';
+import { CourseAddForm } from './CourseAddForm';
 import { palette } from '../../utils/common';
 import { ErrorContainer } from './ErrorContainer';
 
@@ -10,33 +10,31 @@ function PageTemplate({ section, getAllData, children }) {
     const [formShow, setFromshow] = useState(false);
     const [errors, setErrors] = useState([]);
 
-    const btnAddNewClick = () => { setFromshow(true)}
+    const btnAddNewClick = () => { setFromshow(true) }
     const btnCloseClick = () => {
         setFromshow(false);
         setErrors([]);
     }
 
-    const form = (section) => {
+    const addNewForm = (section) => {
         switch (section) {
             case 'Student':
-                return <StudentForm
+                return <StudentAddForm
                     formShow={formShow}
                     getAllData={getAllData}
                     setErrors={setErrors} />
             case 'Teacher':
-                return <TeacherForm
+                return <TeacherAddForm
                     formShow={formShow}
                     getAllData={getAllData}
                     setErrors={setErrors} />
             case 'Course':
-                return <CourseForm
+                return <CourseAddForm
                     formShow={formShow}
                     getAllData={getAllData}
                     setErrors={setErrors} />
         }
     }
-
-    const color = section.toLowerCase();
 
     return (
         <div className='PageTemplate'>
@@ -47,7 +45,7 @@ function PageTemplate({ section, getAllData, children }) {
             <div className={`addNewFrom${formShow ? " show" : ""}`}>
                 <h2>Add New {section}</h2>
                 <button className='closeBtn' onClick={btnCloseClick}>x</button>
-                {form(section)}
+                {addNewForm(section)}
                 <ErrorContainer errors={errors} />
             </div>
         </div>

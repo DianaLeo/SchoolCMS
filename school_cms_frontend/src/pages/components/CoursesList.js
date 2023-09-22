@@ -1,8 +1,10 @@
-function CoursesList({data}) {
+import { CourseListItem } from "./CourseListItem";
+
+function CoursesList({data,getAllData}) {
     let arr = [];
     data.map((i,index)=>{
         arr.push(
-            <li key={index}>{i._id}</li>
+            <CourseListItem data={i} getAllData={getAllData} key={index} />
         )
     })
 
