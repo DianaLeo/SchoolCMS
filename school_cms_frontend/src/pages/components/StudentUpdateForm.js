@@ -18,17 +18,13 @@ function StudentUpdateForm({ show, setshow, data, getAllData }) {
     const inputEmail = useRef();
 
     useEffect(() => {
-        setErrFirstname(false);
-        setErrLastname(false);
-        setErrEmail(false);
-        setErrors([]);
+        refreshForm();
     }, [show]);
 
     const formSubmitHandler = async (e) => {
         e.preventDefault();
         const formData = new FormData(form.current);
         const studentData = Object.fromEntries(formData.entries());
-        console.log(studentData);
         try {
             console.log(`${baseUrl}v1/students/${data._id}`);
             const response = await fetch(`${baseUrl}v1/students/${data._id}`, {
@@ -36,14 +32,9 @@ function StudentUpdateForm({ show, setshow, data, getAllData }) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(studentData)
             });
-            console.log('response.ok=',response.ok);
             if (response.ok) {
-                console.log('update student res ok');
                 getAllData();
-                setErrFirstname(false);
-                setErrLastname(false);
-                setErrEmail(false);
-                setErrors([]);
+                refreshForm();
             }
             const responseJSON = await response.json();
             if (responseJSON.errors) {
@@ -64,7 +55,7 @@ function StudentUpdateForm({ show, setshow, data, getAllData }) {
     const emailChangeHandler = (e) => { setEmail(e.target.value) }
 
     const editClickHandler = (e) => {
-        e.preventDefault();
+        //e.preventDefault();
         inputFirstname.current.removeAttribute('disabled')
         inputLastname.current.removeAttribute('disabled')
         inputEmail.current.removeAttribute('disabled')
@@ -94,6 +85,12 @@ function StudentUpdateForm({ show, setshow, data, getAllData }) {
         }
     }
 
+    const refreshForm = ()=>{
+        setErrFirstname(false);
+        setErrLastname(false);
+        setErrEmail(false);
+        setErrors([]);
+    }
     return (
         <form ref={form} className={`updateForm ${show ? "show" : ""}`} onSubmit={formSubmitHandler}>
             <div className="detialContainer">
@@ -117,7 +114,6 @@ function StudentUpdateForm({ show, setshow, data, getAllData }) {
             </div>
             <div className="buttonContainer">
                 <button onClick={editClickHandler}>Edit</button>
-
                 <button onClick={deleteClickHandler}>Delete</button>
                 <button type="submit">Save</button>
             </div>

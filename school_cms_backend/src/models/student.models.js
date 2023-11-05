@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-var validateEmail = function(email) {
+var validateEmail = function (email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return re.test(email)
 };
@@ -9,11 +9,11 @@ var validateEmail = function(email) {
 const studentSchema = new Schema({
     firstname: {
         type: String,
-        required: [true,'Firstname is required'],
+        required: [true, 'Firstname is required'],
     },
     lastname: {
         type: String,
-        required: [true,'Lastname is required'],
+        required: [true, 'Lastname is required'],
     },
     email: {
         type: String,
@@ -22,10 +22,10 @@ const studentSchema = new Schema({
     },
     courses: [
         {
-            type:String,
+            type: String,
             ref: 'Course',
         }
-    ]//strictly no comma at the last one
+    ]
 }, {
     timestamps: true
 }

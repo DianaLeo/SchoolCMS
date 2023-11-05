@@ -6,9 +6,13 @@ function StudentAddForm({ formShow, getAllData, setErrors }) {
     const [firstname, setFirstname] = useState(false);
     const [lastname, setLastname] = useState(false);
     const [email, setEmail] = useState(false);
+    const [courses, setCourses] = useState([]);
 
     const form = useRef();
 
+    useEffect(() => {
+        getAllCourses();
+    }, [])
     useEffect(() => {
         form.current.reset();
         setFirstname(false);
@@ -50,6 +54,21 @@ function StudentAddForm({ formShow, getAllData, setErrors }) {
         }
     }
 
+    const getAllCourses = () => {
+        fetch(`${baseUrl}v1/courses`)
+            .then((res) => res.json())
+            .then((data) => {
+                setCourses(data);
+            })
+    }
+
+    let arr = [];
+    const courseCheckbox = courses.map((course,index) => {
+        arr.push(
+            <input  key={index} type="checkbox" name="courses" value={course.code} />
+        )
+    })
+
     return (
         <form ref={form} onSubmit={formSubmitHandler}>
             <label htmlFor="firstname">First Name:</label>
@@ -59,7 +78,7 @@ function StudentAddForm({ formShow, getAllData, setErrors }) {
             <label htmlFor="email">Email:</label>
             <input type="text" className={`${email ? "error" : ""}`} id="email" name="email" />
             <label htmlFor="courses">Courses:</label>
-            <textarea type="text" id="courses" name="courses"></textarea>
+            {arr}
             <button type="submit">Add</button>
         </form>
     )

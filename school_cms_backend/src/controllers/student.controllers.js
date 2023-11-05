@@ -120,8 +120,8 @@ const deleteStudentById = async (req, res) => {
 //Add and remove Student to/from Course. Can be done in course.controllers.js as well
 
 // /v1/students/:studentId/courses/:courseId
-// find student id
-// find course id
+// find student by id
+// find course by id
 // validate student and course exist
 // add course to student
 // add student to course
@@ -132,11 +132,12 @@ const addStudentToCourse = async (req, res) => {
     try {
         const student = await Student.findById(studentId).exec();
         const course = await Course.findById(courseId).exec();
+        // Mongoose returns undefined if student/course not found, instead of throwing an error
         if (!student || !course) {
             res.status(404).json({ error: 'Student or course not found' })
             return;
         }
-        // can add transaction
+        // can add transaction, but MongoDB doesn't support transactions in dev mode
 
         //method 1 : student.courses.push(courseId);
         //method 2
