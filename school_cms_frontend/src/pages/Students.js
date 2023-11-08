@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { PageTemplate } from "./components/PageTemplate";
-import { StudentsList } from "./components/StudentsList";
-import { StudentAddForm } from "./components/StudentAddForm";
+import { PageTemplate } from "../components/PageTemplate";
+import { StudentsList } from "../components/StudentsList";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 

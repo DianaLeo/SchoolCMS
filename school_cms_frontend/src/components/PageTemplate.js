@@ -3,7 +3,7 @@ import './PageTemplate.css';
 import { StudentAddForm } from './StudentAddForm';
 import { TeacherAddForm } from './TeacherAddForm';
 import { CourseAddForm } from './CourseAddForm';
-import { palette } from '../../utils/common';
+import { palette } from '../utils/theme';
 import { ErrorContainer } from './ErrorContainer';
 
 function PageTemplate({ section, getAllData, children }) {

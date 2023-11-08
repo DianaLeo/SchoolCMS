@@ -34,7 +34,7 @@ function CourseAddForm({ formShow, getAllData, setErrors }) {
             }
             const data = await response.json();
             if (data.errors) {
-                console.log('data.errors');
+                console.log('data.errors=',data.errors);
                 Object.keys(data.errors).map((k) => {
                     if (k === 'code') seterrId(true)
                     if (k === 'name') setErrName(true)

@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const Joi = require('joi');
 
 var validateEmail = function (email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -17,8 +18,19 @@ const studentSchema = new Schema({
     },
     email: {
         type: String,
+        //method 1:
         //validate: [validateEmail, 'Please fill a valid email address'],
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+        //method 2:
+        //match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
+        //method 3:
+        validate:[
+            {
+                validator:email=>{
+                    return Joi.string().email().validate(email).error === undefined;
+                },
+                msg:'Invalid email format',
+            }
+        ]
     },
     courses: [
         {

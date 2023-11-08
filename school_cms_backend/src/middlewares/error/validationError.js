@@ -2,7 +2,7 @@
 // If I want to get a more detailed message,
 // I can use morgan to get which request user sent,
 // I can use winston to get which step the error occurred.
-// error type:
+// Mongoose error type:
 // {
 //     errors
 //     _message
@@ -20,5 +20,5 @@ module.exports = (error, req, res, next) => {
         }
         return res.status(400).json({ errors });
     }
-    next(error); // next to unknown error
+    next(error); // next to notFound error
 }

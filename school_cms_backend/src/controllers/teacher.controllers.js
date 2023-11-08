@@ -1,30 +1,19 @@
 const Teacher = require('../models/teacher.models');
 const Course = require('../models/course.models');
+const NotFoundException = require('../exceptions/NotFoundException');
 
 const getAllTeachers = async (req, res) => {
-    try {
-        const teachers = await Teacher.find().exec();
-        res.json(teachers);
-    } catch (error) {
-        res.status(500).json('Server error');
-    }
+    const teachers = await Teacher.find().exec();
+    res.json(teachers);
 }
 
 const getTeacherById = async (req, res) => {
     const { id } = req.params;
-    try {
-        const teacher = await Teacher.findById(id).exec();
-        if (!teacher) {
-            res.status(404).json('Teacher not found');
-            return;
-        }
-        res.json(teacher);
-    } catch (error) {
-        res.status(500).json({
-            error: 'Server error',
-            msg: error.message
-        });
+    const teacher = await Teacher.findById(id).exec();
+    if (!teacher) {
+        throw new NotFoundException('Teacher not found')
     }
+    res.json(teacher);
 }
 
 const addTeachers = async (req, res) => {
@@ -33,131 +22,82 @@ const addTeachers = async (req, res) => {
     const teacher = new Teacher({
         firstname, lastname, email
     });
-    try {
-        await teacher.save();
-        res.json(teacher);
-    } catch (error) {
-        if (error.name === 'ValidationError') {
-            const errors = {};
-            for (const field in error.errors) {
-                errors[field] = error.errors[field].message;
-            }
-            console.log(errors);
-            return res.status(400).json({ errors });
-        }
-        res.status(500).json(error);
-    }
+    await teacher.save();
+    res.json(teacher);
 }
 
 const updateTeacherById = async (req, res) => {
     console.log('updating teacher');
     const { id } = req.params;
     const { firstname, lastname, email } = req.body;
-    try {
-        //findByIdAndUpdate automatically check input data
-        //if there is an undefined, this field won't be updated
-        const teacher = await Teacher.findByIdAndUpdate(
-            id,
-            { firstname, lastname, email },
-            {
-                new: true,
-                runValidators: true
-            }
-        ).exec();
-        if (!teacher) {
-            res.status(404).json('Teacher not found');
-            return;
+    //findByIdAndUpdate automatically check input data
+    //if there is an undefined, this field won't be updated
+    const teacher = await Teacher.findByIdAndUpdate(
+        id,
+        { firstname, lastname, email },
+        {
+            new: true,
+            runValidators: true
         }
-        res.json(teacher);
-
-    } catch (error) {
-        if (error.name === 'ValidationError') {
-            const errors = {};
-            for (const field in error.errors) {
-                errors[field] = error.errors[field].message;
-            }
-            console.log(errors);
-            return res.status(400).json({ errors });
-        }
-        res.status(500).json(error);
+    ).exec();
+    if (!teacher) {
+        throw new NotFoundException('Teacher not found')
     }
+    res.json(teacher);
 }
+
 const deleteTeacherById = async (req, res) => {
     const { id } = req.params;
-    try {
-        const teacher = await Teacher.findById(id).exec();
-        if (!teacher) {
-            res.status(404).json('Teacher not found');
-            return;
-        }
-        teacher.courses.forEach(async (course) => {
-            const courseId = course.code;
-            await Course.findByIdAndUpdate(courseId,
-                { $pull: { teachers: id } }
-            ).exec();
-        })
-        await Teacher.findByIdAndDelete(id).exec();
-        res.sendStatus(204);
-    } catch (error) {
-        res.status(500).json({
-            error: 'Server error',
-            msg: error.message
-        });
+    const teacher = await Teacher.findById(id).exec();
+    if (!teacher) {
+        throw new NotFoundException('Teacher not found')
     }
+    teacher.courses.forEach(async (course) => {
+        const courseId = course.code;
+        await Course.findByIdAndUpdate(courseId,
+            { $pull: { teachers: id } }
+        ).exec();
+    })
+    await Teacher.findByIdAndDelete(id).exec();
+    res.sendStatus(204);
 }
 
 
 // /v1/teachers/:teacherId/courses/:courseId
 const addTeacherToCourse = async (req, res) => {
     const { teacherId, courseId } = req.params;
-    try {
-        const teacher = await Teacher.findById(teacherId).exec();
-        const course = await Course.findById(courseId).exec();
-        if (!teacher || !course) {
-            res.status(404).json({ error: 'Teacher or course not found' })
-            return;
-        }
-
-        teacher.courses.addToSet(courseId);
-        course.teachers.addToSet(teacherId);
-
-        await teacher.save();
-        await course.save();
-
-        res.json(teacher);
-    } catch (error) {
-        res.status(500).json({
-            error: 'Server error',
-            msg: error.message
-        })
+    const teacher = await Teacher.findById(teacherId).exec();
+    const course = await Course.findById(courseId).exec();
+    if (!teacher || !course) {
+        throw new NotFoundException('Teacher or course not found')
     }
+
+    teacher.courses.addToSet(courseId);
+    course.teachers.addToSet(teacherId);
+
+    await teacher.save();
+    await course.save();
+
+    res.json(teacher);
 }
 
 // /v1/teachers/:teacherId/courses/:courseId
 const removeTeacherFromCourse = async (req, res) => {
     const { teacherId, courseId } = req.params;
-    try {
-        const teacher = await Teacher.findById(teacherId).exec();
-        const course = await Course.findById(courseId).exec();
-        if (!teacher || !course) {
-            res.status(404).json({ error: 'Student or course not found' })
-            return;
-        }
-
-        await Teacher.findByIdAndUpdate(teacherId,
-            { $pull: { courses: courseId } }
-        ).exec();
-        await Course.findByIdAndUpdate(courseId,
-            { $pull: { teachers: teacherId } }
-        ).exec();
-
-        res.sendStatus(204);
-    } catch (error) {
-        res.status(500).json({
-            error: 'Server error',
-            msg: error.message
-        })
+    const teacher = await Teacher.findById(teacherId).exec();
+    const course = await Course.findById(courseId).exec();
+    if (!teacher || !course) {
+        throw new NotFoundException('Teacher or course not found')
     }
+
+    await Teacher.findByIdAndUpdate(teacherId,
+        { $pull: { courses: courseId } }
+    ).exec();
+    await Course.findByIdAndUpdate(courseId,
+        { $pull: { teachers: teacherId } }
+    ).exec();
+
+    res.sendStatus(204);
 }
 
 module.exports = {

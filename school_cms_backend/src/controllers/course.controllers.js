@@ -2,6 +2,7 @@ const NotFoundException = require('../exceptions/NotFoundException');
 const Course = require('../models/course.models');
 const Student = require('../models/student.models');
 const Teacher = require('../models/teacher.models');
+//const Joi = require('joi');
 
 const getAllCourses = async (req, res) => {
     const courses = await Course.find().exec();
@@ -18,6 +19,20 @@ const getCourseById = async (req, res) => {
 };
 
 const addCourse = async (req, res) => {
+    // const schema = Joi.object({
+    //     code: Joi.string()
+    //         .uppercase()
+    //         .regex(/^[a-zA-Z][a-zA-Z]-[a-zA-Z][a-zA-Z]-\d\d$/)
+    //         .message('Invalid code format, expecting "xx-xx-00", x for a letter, 0 for a number')
+    //         .required(),
+    //     name: Joi.string().required(),
+    //     description: Joi.string().optional(),
+    // })
+    // const validBody = await schema.validateAsync(req.body, {
+    //     allowUnknown: true, // allow fields that are not defined in the Schema, won't throw errors
+    //     stripUnknown: true, // don't process those unknown fields and delete them 
+    // });
+
     const { code, name, description } = req.body;
     const course = new Course({ code, name, description });
     await course.save();
@@ -25,7 +40,7 @@ const addCourse = async (req, res) => {
 };
 
 const updateCourseById = async (req, res) => {
-    console.log('updating course, req.body=', req.body);
+    console.log('updating course');
     const { id } = req.params;
     const { name, description } = req.body;
     // findByIdAndUpdate sends request to MongoDB directly, skips Mongoose model validation
