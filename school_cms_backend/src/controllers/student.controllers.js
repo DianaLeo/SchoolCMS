@@ -23,7 +23,7 @@ const addStudents = async (req, res) => {
         firstname, lastname, email
     });
     await student.save();
-    res.json(student);
+    res.status(201).json(student);
 }
 
 const updateStudentById = async (req, res) => {
