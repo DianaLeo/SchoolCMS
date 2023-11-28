@@ -9,12 +9,12 @@ const roleGuard = require('../middlewares/roleGuard.js');
 
 const v1Router = Router();
 
-v1Router.use('/students', authGuard, studentRouter);
+v1Router.use('/students', studentRouter);
 // authGuard and adminGuard can be added to anywhere thru the route, depending on your logic
 //v1Router.use('/courses', authGuard, courseRouter); // only logged in users can read courses data
 //v1Router.use('/courses', adminGuard, courseRouter); // only admin users can read courses data
-v1Router.use('/courses', authGuard, courseRouter); //roleGuard('admin'), 
-v1Router.use('/teachers', authGuard, teacherRouter);
+v1Router.use('/courses', courseRouter); //roleGuard('admin'), 
+v1Router.use('/teachers', teacherRouter);
 v1Router.use('/auth', authRouter);
 
 module.exports = v1Router;

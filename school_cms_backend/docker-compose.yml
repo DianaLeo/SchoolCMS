@@ -1,6 +1,6 @@
 version: '3'
 services:
-  server:
+  backend:
     # build: .
     image: node:18
     volumes:
@@ -9,17 +9,17 @@ services:
     ports:
       - 8000:8000
     environment:
-      - JWT_KEY=secret
-      - CONNECTION_STRING=mongodb://database/school_cms
+      - JWT_KEY=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChPrtQ8PbmDIXSpRClYBx6js0J1MqROeD815VuSfeSM8RSfFO7pkF0Hyum2TTIKSn3Do4DYy//T6E1dMcvK0f9Pcl4u1itgjF1rTbk7SrO3AIZQzGwhcTmBhj2UfWiOwBpjAbIeVOaOZ4/U7OVfOw6PUCUT/WJ5tWyhL5JdHCLrwIDAQAB
+      - CONNECTION_STRING=mongodb+srv://diana:1101928jj@atlascluster.rzmioss.mongodb.net/school
       # this mongo here should be identical with the 'mongo' service name
-    depends_on:
-      - database
+    # depends_on:
+    #   - database
       # backend service depends on database service, launch database service first
-    container_name: school_cms_back_db
-    command: sh -c "cd /app && npm i && npm run dev"
+    container_name: cms_backend
+    command: sh -c "cd /app && npm i && npm start"
     
-  database:
-    image: mongo
-    ports:
-      - 27017:27017
-    container_name: school_cms_mongo
+  # database:
+  #   image: mongo
+  #   ports:
+  #     - 27017:27017
+  #   container_name: cms_database

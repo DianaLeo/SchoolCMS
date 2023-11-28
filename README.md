@@ -63,6 +63,8 @@ There are two middleware chains in express, one is normal middleware chain, the 
 If any error occurs, it jumps to the error middleware chain **automatically**.
 Thus we don't need try-catch if we use error middlewares.
 
+combine with morgan to locate the error
+
 **src/middlewares/error/validationError.js**
 ```javascript
 module.exports = (error, req, res, next) => {
@@ -372,7 +374,100 @@ From then on, every time the user login, or send any request, the token will be 
 ![invalid signature](/assets/images/invalid%20signature.png)
 ![signature verified](/assets/images/signature%20varified.jpg)
 
+#### Generate token
+```javascript
+const generateToken = (payload) => {
+    return jwt.sign(payload, secret, { expiresIn: '1d' });
+}
+const validateToken = (token) => {
+    try {
+        const decoded = jwt.verify(token, secret);
+        return decoded;
+    } catch (error) {
+        return null;
+    }
+}
+```
+payload can include email, username, role, avatar,...
+
+generateToken can happen in different stage: 
+1. when user register successfully
+2. generateToken when user register successfully, but cannot use until user validate by email
+3. generateToken until user validate by email 
+4. when user login successfully
+
+```javascript
+const register = async (req, res) => {
+    const { username, password } = req.body;
+    console.log(req.body,'req.body');
+    const user = new User({ username, password });
+    await user.hashPassword();
+    await user.save();
+
+    const token = generateToken({_id: user._id, username, role:'admin'});
+    res.status(201).json({token});
+}
+```
+
+#### AuthGuard middleware
+Now since we already got a token, how do we make sure that the user has taken take this token with him when he send a request
+
+```javascript
+module.exports = (req,res,next)=>{
+    const authorization = req.header('Authorization');
+    if (!authorization) {
+        res.status(401).json({error:'Missing authorization header'});
+        return;
+    }
+    // Bearer xxxxx
+    const [type, token] = authorization.split(' ');
+    if (type !== 'Bearer' || !token) {
+        res.status(401).json({error:'Invalid token'});
+        return;
+    }
+    const payload = validateToken(token);
+    if (!payload) {
+        res.status(401).json({error:'Invalid token'});
+        return;
+    }
+    // req.user = payload;
+    next();
+}
+```
+```javascript
+v1Router.use('/courses', authGuard, courseRouter);
+```
+
+
+#### jwt
+cross-domain
+third-party login
+
+private ley public key
+Single Sign On
+
+#### cookie-session
+session id -> user -> cookie (same domain)
+SSR server side rendering
+
 
 ### Role control
 RBAC role based access control
 ABAC attribute based access control
+
+admin - when generateToken(payload), give a field: role:'admin'
+
+ /roleGuard.js
+```javascript
+//high order function
+module.exports = (role)=>(req,res,next)=>{
+    //same as authGuard
+    if (payload.role!==role) {
+        res.status(403).json({error:'Invalid permission'});
+        return;
+    }
+}
+```
+```javascript
+v1Router.use('/courses', roleGuard('admin'), courseRouter);
+```

@@ -1,0 +1,55 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ap-southeast-2
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    # - name: Set up SSH Key
+    #   uses: webfactory/ssh-agent@v0.8.0
+    #   with:
+    #     ssh-private-key: ${{ secrets.CICD_EC2 }}
+
+    # - name: Connect to EC2 and Deploy
+    #   run: |
+    #     ssh ec2-user@ec2-3-27-194-35.ap-southeast-2.compute.amazonaws.com "mkdir ~/diana/test"
+
+    - name: Connect to EC2
+      uses: easingthemes/ssh-deploy@main
+      with:
+        SSH_PRIVATE_KEY: ${{ secrets.CICD_EC2 }}
+        REMOTE_HOST: ec2-3-27-194-35.ap-southeast-2.compute.amazonaws.com
+        REMOTE_USER: ec2-user
+        TARGET: ~/diana/CICD
+        SCRIPT_AFTER: |
+          cd ~/diana/CICD
+          npm i
+          screen -S BACKCICD
+          npm start
+          exit
+
+    # - name: Clone to EC2
+    #   run: |
+    #     echo "Hello from EC2!"
+    #     pwd
+    #     hostnamectl
+    #     git clone https://github.com/DianaLeo/SchoolCMS_Backend_CICD
+
+    # - name: Build and run
+    #   run: |
+    #     npm i
+    #     npm start
