@@ -1,0 +1,25 @@
+version: '3'
+services:
+  server:
+    # build: .
+    image: node:18
+    volumes:
+      - .:/app
+      - /app/node_modules # ignore node_modules
+    ports:
+      - 8000:8000
+    environment:
+      - JWT_KEY=secret
+      - CONNECTION_STRING=mongodb://database/school_cms
+      # this mongo here should be identical with the 'mongo' service name
+    depends_on:
+      - database
+      # backend service depends on database service, launch database service first
+    container_name: school_cms_back_db
+    command: sh -c "cd /app && npm i && npm run dev"
+    
+  database:
+    image: mongo
+    ports:
+      - 27017:27017
+    container_name: school_cms_mongo
